@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "scan": "tsx src/client/index.ts",
+    "list": "tsx src/client/list.ts",
     "server": "tsx src/server/index.ts"
   },
   "repository": {
