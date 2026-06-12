@@ -1,4 +1,5 @@
 import { scanDirectory } from "./scanner.js";
+import { uploadFiles } from "./uploader.js";
 
 const root = process.argv[2];
 if (!root) {
@@ -8,4 +9,7 @@ if (!root) {
 
 const files = scanDirectory(root);
 console.log(files);
-console.log(`\n${files.length} files found`);
+console.log(`${files.length} files found, uploading...`);
+
+await uploadFiles(files);
+console.log("Done.");
