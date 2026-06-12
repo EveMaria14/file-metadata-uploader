@@ -1,6 +1,7 @@
 import { readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { FileMetadata } from "../shared/types.js";
+import { isBinaryExecutable } from "./filetype.js";
 
 export function scanDirectory(root: string, currentDir = root): FileMetadata[] {
   const results: FileMetadata[] = [];
@@ -19,10 +20,17 @@ export function scanDirectory(root: string, currentDir = root): FileMetadata[] {
     } else if (entry.isFile()) {
       // If it's a file, push its metadata to the results array
       const metadata = statSync(fullPath);
-      results.push({
+      const file: FileMetadata = {
         filePath: relative(root, fullPath),
         fileSize: metadata.size,
-      });
+      };
+
+      // If its an executable, add it's lastModified time
+      if (isBinaryExecutable(fullPath)) {
+        file.lastModified = metadata.mtime.toISOString();
+      }
+
+      results.push(file);
     }
   }
 
